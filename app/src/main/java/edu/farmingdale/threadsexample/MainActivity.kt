@@ -35,8 +35,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-// ToDo 1: Call `FibonacciDemoNoBgThrd` that calculates the Fibonacci number of a given number.
-// ToDo 2: Create a composable function called `FibonacciDemoWithCoroutine` that calculates the
+// DoneToDo 1: Call `FibonacciDemoNoBgThrd` that calculates the Fibonacci number of a given number.
+// DoneToDo 2: Create a composable function called `FibonacciDemoWithCoroutine` that calculates the
 //  Fibonacci number of a given number using a coroutine.
 // ToDo 3: Start the application using the CountDownActivity
 // ToDo 4: Make the Text of the timer larger
