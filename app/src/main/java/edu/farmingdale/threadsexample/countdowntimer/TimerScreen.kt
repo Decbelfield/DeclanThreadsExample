@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,54 +36,69 @@ import java.util.Locale
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
+
 @Composable
 fun TimerScreen(
     modifier: Modifier = Modifier,
     timerViewModel: TimerViewModel = viewModel()
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        val textColor = if (timerViewModel.remainingMillis <= 10_000) Color.Red else Color.Black
+        val textStyle = if (timerViewModel.remainingMillis <= 10_000) FontWeight.Bold else FontWeight.Normal
+
         Box(
             modifier = modifier
                 .padding(20.dp)
                 .size(240.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (timerViewModel.isRunning) {
-
-            }
+            CircularProgressIndicator(
+                progress = { timerViewModel.remainingMillis.toFloat() / timerViewModel.totalMillis.toFloat() },
+                modifier = Modifier.size(200.dp),
+                color = if (timerViewModel.remainingMillis <= 10_000) Color.Red else Color.Blue,
+                strokeWidth = 10.dp,
+            )
             Text(
                 text = timerText(timerViewModel.remainingMillis),
                 fontSize = 60.sp,
+                color = textColor,
+                fontWeight = textStyle
             )
         }
+
         TimePicker(
             hour = timerViewModel.selectedHour,
             min = timerViewModel.selectedMinute,
             sec = timerViewModel.selectedSecond,
             onTimePick = timerViewModel::selectTime
         )
-        if (timerViewModel.isRunning) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             Button(
-                onClick = timerViewModel::cancelTimer,
-                modifier = modifier.padding(50.dp)
+                onClick = {
+                    if (timerViewModel.isRunning) {
+                        timerViewModel.cancelTimer()
+                    } else {
+                        timerViewModel.startTimer()
+                    }
+                },
+                enabled = timerViewModel.selectedHour + timerViewModel.selectedMinute + timerViewModel.selectedSecond > 0
             ) {
-                Text("Cancel")
+                Text(if (timerViewModel.isRunning) "Cancel" else "Start")
             }
-        } else {
+
             Button(
-                enabled = timerViewModel.selectedHour +
-                        timerViewModel.selectedMinute +
-                        timerViewModel.selectedSecond > 0,
-                onClick = timerViewModel::startTimer,
-                modifier = modifier.padding(top = 50.dp)
+                onClick = timerViewModel::resetTimer,
+                enabled = timerViewModel.isRunning || timerViewModel.totalMillis > 0
             ) {
-                Text("Start")
+                Text("Reset")
             }
         }
     }
 }
-
-
 
 fun timerText(timeInMillis: Long): String {
     val duration: Duration = timeInMillis.milliseconds

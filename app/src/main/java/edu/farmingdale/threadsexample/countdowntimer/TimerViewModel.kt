@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TimerViewModel : ViewModel() {
+
     private var timerJob: Job? = null
 
     // Values selected in time picker
@@ -59,7 +60,15 @@ class TimerViewModel : ViewModel() {
             }
         }
     }
-
+    fun resetTimer() {
+        selectedHour = 0
+        selectedMinute = 0
+        selectedSecond = 0
+        totalMillis = 0
+        remainingMillis = 0
+        isRunning = false
+        timerJob?.cancel()
+    }
     fun cancelTimer() {
         if (isRunning) {
             timerJob?.cancel()

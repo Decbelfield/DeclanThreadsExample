@@ -31,7 +31,7 @@ class TimerWorker(context: Context, parameters: WorkerParameters) :
         }
 
         // Create notification channel for all notifications
-        createTimerNotificationChannel()
+        createTimerNotificationChannel( )
 
         // Post notifications every second until no time remains
         while (remainingMillis > 0) {
