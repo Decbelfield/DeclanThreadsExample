@@ -1,5 +1,9 @@
 package edu.farmingdale.threadsexample.countdowntimer
 
+import android.content.Context
+import android.media.RingtoneManager
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -59,7 +63,9 @@ class TimerViewModel : ViewModel() {
                 isRunning = false
             }
         }
+
     }
+
     fun resetTimer() {
         selectedHour = 0
         selectedMinute = 0
@@ -76,9 +82,17 @@ class TimerViewModel : ViewModel() {
             remainingMillis = 0
         }
     }
-
+    fun onTimerFinished(context: Context) {
+        val alarmSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        val ringtone = RingtoneManager.getRingtone(context, alarmSoundUri)
+        ringtone.play()
+        Handler(Looper.getMainLooper()).postDelayed({
+            ringtone.stop()
+        }, 5000)
+    }
     override fun onCleared() {
         super.onCleared()
         timerJob?.cancel()
     }
+
 }

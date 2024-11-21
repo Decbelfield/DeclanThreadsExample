@@ -1,5 +1,7 @@
 package edu.farmingdale.threadsexample.countdowntimer
 
+import android.content.Context
+import android.media.RingtoneManager
 import android.util.Log
 import android.widget.NumberPicker
 import androidx.compose.animation.core.LinearEasing
@@ -36,7 +38,6 @@ import java.util.Locale
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-
 @Composable
 fun TimerScreen(
     modifier: Modifier = Modifier,
@@ -60,7 +61,7 @@ fun TimerScreen(
             )
             Text(
                 text = timerText(timerViewModel.remainingMillis),
-                fontSize = 60.sp,
+                fontSize = 40.sp,
                 color = textColor,
                 fontWeight = textStyle
             )
